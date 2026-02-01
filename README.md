@@ -2,9 +2,10 @@
 
 **Free & Open Source** CLI for AI memory files.
 
-**AIF-BIN** = AI Formatted - Binary | **AIMF** = AI Memory Format
-
-Both `.aif-bin` and `.aimf` extensions are synonymous and fully interchangeable.
+| Version | Extension | Full Name | Format |
+|---------|-----------|-----------|--------|
+| v1 | `.aimf` | AI Memory Format | JSON |
+| v2 | `.aif-bin` | AI Formatted - Binary | Binary (MessagePack) |
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -13,7 +14,11 @@ Both `.aif-bin` and `.aimf` extensions are synonymous and fully interchangeable.
 
 ## What is AIF-BIN?
 
-AIF-BIN (AI Formatted - Binary), also known as AIMF (AI Memory Format), is a file format that makes documents AI-native. A single `.aif-bin` or `.aimf` file contains:
+A file format specification with two versions:
+- **AIMF** (.aimf) - AI Memory Format, v1 JSON encoding for simplicity
+- **AIF-BIN** (.aif-bin) - AI Formatted - Binary, v2 binary encoding for performance
+
+A single `.aimf` or `.aif-bin` file contains:
 
 - **Original document** — The source file preserved
 - **Extracted content** — Text parsed into searchable chunks
@@ -27,14 +32,14 @@ This is the **free, open source** implementation. For semantic search, batch pro
 
 This repository contains both format versions:
 
-| Version | File | Format | Features |
-|---------|------|--------|----------|
-| **v1** | `aifbin_v1.py` | JSON | Human-readable, simple |
-| **v2** | `aifbin_v2.py` | Binary | 50% smaller, faster, embeddings |
+| Version | Extension | File | Full Name | Format |
+|---------|-----------|------|-----------|--------|
+| **v1** | `.aimf` | `aifbin_v1.py` | AI Memory Format | JSON |
+| **v2** | `.aif-bin` | `aifbin_v2.py` | AI Formatted - Binary | Binary (MessagePack) |
 
-### v1 JSON Format (Lite)
+### AIMF - AI Memory Format (v1)
 
-Simple, human-readable JSON. Great for learning and debugging.
+Simple, human-readable JSON. Uses `.aimf` extension. Great for learning and debugging.
 
 ```json
 {
@@ -51,9 +56,9 @@ Simple, human-readable JSON. Great for learning and debugging.
 }
 ```
 
-### v2 Binary Format (Pro)
+### AIF-BIN - AI Formatted - Binary (v2)
 
-Compact binary format with MessagePack encoding. Used by AIF-BIN Pro and Studio.
+Compact binary format with MessagePack encoding. Uses `.aif-bin` extension. Used by AIF-BIN Pro and Studio.
 
 ```
 [Header: 64 bytes]
@@ -94,27 +99,29 @@ python3 aifbin_v2.py --help
 
 ## Usage
 
-### v1 Commands (aifbin_v1.py)
+### AIMF Commands (aifbin_v1.py)
 
 ```bash
-# Convert markdown to AIF-BIN (v1 JSON)
+# Convert markdown to AIMF (v1 JSON)
 python3 aifbin_v1.py migrate notes.md
+# Output: notes.aimf
 
 # View file info
-python3 aifbin_v1.py info notes.aif-bin
+python3 aifbin_v1.py info notes.aimf
 
 # Extract original content
-python3 aifbin_v1.py extract notes.aif-bin
+python3 aifbin_v1.py extract notes.aimf
 
 # List chunks
-python3 aifbin_v1.py chunks notes.aif-bin
+python3 aifbin_v1.py chunks notes.aimf
 ```
 
-### v2 Commands (aifbin_v2.py)
+### AIF-BIN Commands (aifbin_v2.py)
 
 ```bash
 # Convert markdown to AIF-BIN (v2 binary)
 python3 aifbin_v2.py migrate notes.md -o output/
+# Output: notes.aif-bin
 
 # View file info
 python3 aifbin_v2.py info notes.aif-bin
@@ -128,14 +135,14 @@ python3 aifbin_v2.py verify notes.aif-bin
 
 ---
 
-## Migrating from v1 to v2
+## Migrating from AIMF to AIF-BIN
 
 ### Why Migrate?
 
 - **50% smaller files** — Binary format is more compact
 - **Faster parsing** — Fixed-offset headers enable direct seeks
 - **Checksums** — CRC64 verification for data integrity
-- **Embeddings** — v2 supports vector embeddings for semantic search
+- **Embeddings** — AIF-BIN supports vector embeddings for semantic search
 - **Typed chunks** — TEXT, TABLE, IMAGE, AUDIO, VIDEO, CODE
 
 ### How to Migrate
@@ -144,8 +151,8 @@ python3 aifbin_v2.py verify notes.aif-bin
 import json
 from aifbin_v2 import AifBinV2Writer
 
-# Load v1 file
-with open('notes.aif-bin', 'r') as f:
+# Load AIMF file (v1)
+with open('notes.aimf', 'r') as f:
     v1_data = json.load(f)
 
 # Create v2 file
