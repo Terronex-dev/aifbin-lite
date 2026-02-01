@@ -1,0 +1,29 @@
+AIF-BIN Lite
+Copyright (c) 2026 Terronex.dev
+
+This product includes software developed by Terronex.dev.
+
+================================================================================
+TRADEMARK NOTICE
+================================================================================
+
+"AIF-BIN" is a trademark of Terronex.dev.
+
+You may use the AIF-BIN name to describe compatibility or interoperability
+with the AIF-BIN format, but you may not use it in a way that suggests
+endorsement by or affiliation with Terronex.dev without permission.
+
+================================================================================
+FORMAT SPECIFICATION
+================================================================================
+
+The AIF-BIN file format specification is provided under the MIT License.
+You are free to implement compatible readers and writers.
+
+================================================================================
+CONTACT
+================================================================================
+
+For licensing inquiries: legal@terronex.dev
+For general support: support@terronex.dev
+Website: https://terronex.dev
