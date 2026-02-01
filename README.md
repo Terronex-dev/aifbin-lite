@@ -12,6 +12,10 @@
 
 ---
 
+## Documentation
+
+- [Technical Whitepaper](docs/whitepaper.html) - Full specification and theory
+
 ## What is AIF-BIN?
 
 A file format specification with two versions:
