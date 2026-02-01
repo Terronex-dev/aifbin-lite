@@ -2,6 +2,8 @@
 
 **Free & Open Source** CLI for AI memory files.
 
+[![Patent Pending](https://img.shields.io/badge/Patent-Pending-blue.svg)](https://www.terronex.dev)
+
 | Version | Extension | Full Name | Format |
 |---------|-----------|-----------|--------|
 | v1 | `.aimf` | AI Memory Format | JSON |
