@@ -450,9 +450,19 @@ if __name__ == "__main__":
         
         print(f"📄 Converting: {source.name}")
         
-        # Read source file
-        with open(source, 'r', encoding='utf-8') as f:
-            content = f.read()
+        # Read source file (handle various encodings including Windows UTF-16/BOM)
+        content = None
+        for encoding in ['utf-8-sig', 'utf-8', 'utf-16', 'latin-1']:
+            try:
+                with open(source, 'r', encoding=encoding) as f:
+                    content = f.read()
+                break
+            except (UnicodeDecodeError, UnicodeError):
+                continue
+        
+        if content is None:
+            print(f"❌ Could not decode {source} with any supported encoding")
+            sys.exit(1)
         
         # Chunk the content
         words = content.split()

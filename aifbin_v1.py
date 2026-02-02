@@ -40,8 +40,18 @@ def chunk_text(text: str, chunk_size: int = 512, overlap: int = 50) -> List[str]
 
 def create_aifbin_lite(source_path: str, output_path: str) -> Dict[str, Any]:
     """Create an AIF-BIN file (v1 JSON format, no embeddings)."""
-    with open(source_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+    # Try UTF-8 first, fall back to other encodings (handles Windows BOM, etc.)
+    content = None
+    for encoding in ['utf-8-sig', 'utf-8', 'utf-16', 'latin-1']:
+        try:
+            with open(source_path, 'r', encoding=encoding) as f:
+                content = f.read()
+            break
+        except (UnicodeDecodeError, UnicodeError):
+            continue
+    
+    if content is None:
+        raise ValueError(f"Could not decode {source_path} with any supported encoding")
     
     text_chunks = chunk_text(content)
     
