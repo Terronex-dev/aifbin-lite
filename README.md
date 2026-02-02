@@ -245,23 +245,71 @@ See `examples/migrate_v1_to_v2.py` for a complete migration script.
 
 ---
 
-## Upgrade to Pro
+## Lite vs Pro
 
-Need more power? [AIF-BIN Pro](https://github.com/terronexdev/aifbin-pro) includes:
+**AIF-BIN Lite** (this repo) handles the **format** — converting your documents into portable, structured files.
 
-- Semantic search (find by meaning)
-- Batch processing (convert directories)
-- Watch mode (auto-sync on changes)
-- Web Inspector (visual analyzer)
-- 5 embedding models
+**AIF-BIN Pro** adds the **intelligence** — AI-powered semantic search that lets you query your documents by meaning, not just keywords.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Your Documents                        │
+│                    (Markdown, notes, docs)                   │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      AIF-BIN Lite (Free)                     │
+│                                                              │
+│   ✓ Convert to .aimf (JSON) or .aif-bin (binary)            │
+│   ✓ Chunking and metadata extraction                         │
+│   ✓ Portable files you own                                   │
+│   ✗ No search — just format conversion                       │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      AIF-BIN Pro (Paid)                      │
+│                                                              │
+│   ✓ Everything in Lite, plus:                                │
+│   ✓ AI embeddings (text → vectors)                           │
+│   ✓ Semantic search ("What did I decide about X?")           │
+│   ✓ Studio GUI for visual exploration                        │
+│   ✓ Plugins (LangChain, Obsidian, VS Code, etc.)             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Why This Architecture?
+
+- **Your data stays portable.** Lite files work anywhere, with or without Pro.
+- **No vendor lock-in.** The format spec is open (MIT). Build your own tools if you want.
+- **Pay for intelligence, not storage.** Lite is free forever. Pro adds the AI layer.
+
+### Ready to Upgrade?
+
+[AIF-BIN Pro](https://github.com/terronexdev/aifbin-pro) includes:
+
+- **Semantic search** — Find by meaning, not keywords
+- **Batch processing** — Convert entire directories
+- **Watch mode** — Auto-sync on file changes
+- **Web Inspector** — Visual file analyzer
+- **5 embedding models** — OpenAI, Cohere, local options
 
 ---
 
-## Legal Notices
+## Legal
 
-- This software is provided under the **MIT License** (see [LICENSE](LICENSE)).
-- **AIF-BIN** is a trademark of Terronex.dev.
-- See [NOTICE](NOTICE) for additional information.
+| Document | Description |
+|----------|-------------|
+| [LICENSE](LICENSE) | MIT License — free to use, modify, distribute |
+| [NOTICE](NOTICE) | Patent, trademark, and Lite vs Pro details |
+| [TERMS](legal/TERMS.md) | Terms of use |
+| [PRIVACY](legal/PRIVACY.md) | Privacy policy (TL;DR: no data collection) |
+| [SECURITY](SECURITY.md) | Security policy and vulnerability reporting |
+
+**Patent Pending:** The AIF-BIN format and methods are subject to a pending patent application. This open-source implementation is provided under the MIT License.
+
+**Trademark:** "AIF-BIN" is a trademark of Terronex.dev. You may use it to describe format compatibility.
 
 ---
 

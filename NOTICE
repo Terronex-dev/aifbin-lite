@@ -4,6 +4,17 @@ Copyright (c) 2026 Terronex.dev
 This product includes software developed by Terronex.dev.
 
 ================================================================================
+PATENT NOTICE
+================================================================================
+
+The AIF-BIN file format and associated methods for semantic document memory
+are the subject of a pending patent application.
+
+This open-source implementation (AIF-BIN Lite) is provided under the MIT
+License, granting you full rights to use, modify, and distribute this
+software for reading and writing AIF-BIN format files.
+
+================================================================================
 TRADEMARK NOTICE
 ================================================================================
 
@@ -19,6 +30,25 @@ FORMAT SPECIFICATION
 
 The AIF-BIN file format specification is provided under the MIT License.
 You are free to implement compatible readers and writers.
+
+================================================================================
+AIF-BIN LITE vs AIF-BIN PRO
+================================================================================
+
+AIF-BIN Lite (this repository):
+  - Free and open source (MIT License)
+  - Format conversion tools (Markdown → AIMF/AIF-BIN)
+  - Chunking, metadata, and file management
+  - No AI or embedding functionality
+
+AIF-BIN Pro (available at terronex.dev):
+  - Commercial product
+  - Full semantic search with AI embeddings
+  - Studio GUI application
+  - Integration plugins (LangChain, Obsidian, VS Code, etc.)
+  - Priority support
+
+Lite handles the format. Pro adds the intelligence.
 
 ================================================================================
 CONTACT
