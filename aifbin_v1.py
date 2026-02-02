@@ -75,14 +75,15 @@ def create_aifbin_lite(source_path: str, output_path: str) -> Dict[str, Any]:
         "size": os.path.getsize(output_path)
     }
 
-def load_aifbin(filepath: str) -> Dict[str, Any]:
-    """Load an AIF-BIN file (v1 JSON format only)."""
-    # First check if it's binary
+def load_aimf(filepath: str) -> Dict[str, Any]:
+    """Load an AIMF file (v1 JSON format only)."""
+    # First check if it's binary (v2)
     with open(filepath, 'rb') as f:
         first_bytes = f.read(8)
     
     if first_bytes.startswith(b'AIFBIN'):
-        print("⚠️  This is a v2 binary file. Use AIF-BIN Pro to read it.")
+        print("⚠️  This is a v2 binary file (.aif-bin). Use AIF-BIN Pro to read it.")
+        print("   Lite only supports v1 JSON files (.aimf)")
         print("   Get Pro: https://aifbin.dev")
         sys.exit(1)
     
@@ -95,7 +96,7 @@ def load_aifbin(filepath: str) -> Dict[str, Any]:
 # ============================================================
 
 def cmd_migrate(args):
-    """Convert a markdown file to AIF-BIN format."""
+    """Convert a markdown file to AIMF format (v1 JSON)."""
     source = Path(args.source)
     
     if not source.exists():
@@ -110,25 +111,26 @@ def cmd_migrate(args):
     if args.output:
         output = Path(args.output)
     else:
-        output = source.with_suffix('.aif-bin')
+        output = source.with_suffix('.aimf')
     
     print(f"📄 Converting: {source.name}")
     result = create_aifbin_lite(str(source), str(output))
     print(f"✅ Created: {output.name} ({result['chunks']} chunks, {result['size']} bytes)")
+    print(f"   Format: AIMF v1 (JSON, human-readable)")
 
 def cmd_info(args):
-    """Show information about an AIF-BIN file."""
+    """Show information about an AIMF file."""
     filepath = Path(args.file)
     
     if not filepath.exists():
         print(f"❌ File not found: {filepath}")
         sys.exit(1)
     
-    data = load_aifbin(str(filepath))
+    data = load_aimf(str(filepath))
     meta = data.get('metadata', {})
     chunks = data.get('chunks', [])
     
-    print(f"\n📦 AIF-BIN File Info")
+    print(f"\n📦 AIMF File Info (v1 JSON)")
     print(f"{'─' * 40}")
     print(f"  File:      {filepath.name}")
     print(f"  Version:   {data.get('version', 'unknown')}")
@@ -137,12 +139,13 @@ def cmd_info(args):
     print(f"  Source:    {meta.get('source_file', 'Unknown')}")
     print(f"  Chunks:    {len(chunks)}")
     print(f"  Has Raw:   {'Yes' if data.get('original_raw') else 'No'}")
+    print(f"\n  💡 Upgrade to .aif-bin (v2) for semantic search")
     print()
 
 def cmd_extract(args):
     """Extract original content from an AIF-BIN file."""
     filepath = Path(args.file)
-    data = load_aifbin(str(filepath))
+    data = load_aimf(str(filepath))
     
     if data.get('original_raw'):
         content = data['original_raw']
@@ -157,12 +160,12 @@ def cmd_extract(args):
         sys.exit(1)
 
 def cmd_chunks(args):
-    """List chunks in an AIF-BIN file."""
+    """List chunks in an AIMF file."""
     filepath = Path(args.file)
-    data = load_aifbin(str(filepath))
+    data = load_aimf(str(filepath))
     chunks = data.get('chunks', [])
     
-    print(f"\n📦 Chunks in {filepath.name}")
+    print(f"\n📦 Chunks in {filepath.name} (AIMF v1)")
     print(f"{'─' * 50}")
     
     for chunk in chunks[:args.limit]:
@@ -180,12 +183,15 @@ def cmd_version(args):
 AIF-BIN Lite v{__version__}
 Free & Open Source CLI for AI Memory Files
 
-📦 Format: v1 JSON (human-readable)
+📦 Format: AIMF v1 (.aimf) — JSON, human-readable
 📄 License: MIT
+
+Upgrade path:
+  .aimf (v1 JSON) → .aif-bin (v2 binary) → semantic search
 
 For advanced features, upgrade to Pro:
   • Semantic search (find by meaning)
-  • v2 binary format (smaller, faster)
+  • v2 binary format (smaller, faster)  
   • Batch parallel processing
   • Watch mode (auto-sync)
   • Web Inspector GUI
@@ -208,22 +214,22 @@ def main():
     subparsers = parser.add_subparsers(dest='command', help='Commands')
     
     # migrate
-    p_migrate = subparsers.add_parser('migrate', help='Convert file to AIF-BIN')
+    p_migrate = subparsers.add_parser('migrate', help='Convert file to AIMF (v1 JSON)')
     p_migrate.add_argument('source', help='Source markdown file')
-    p_migrate.add_argument('-o', '--output', help='Output file (default: same name with .aif-bin)')
+    p_migrate.add_argument('-o', '--output', help='Output file (default: same name with .aimf)')
     
     # info
     p_info = subparsers.add_parser('info', help='Show file info')
-    p_info.add_argument('file', help='AIF-BIN file')
+    p_info.add_argument('file', help='AIMF file (.aimf)')
     
     # extract
     p_extract = subparsers.add_parser('extract', help='Extract original content')
-    p_extract.add_argument('file', help='AIF-BIN file')
+    p_extract.add_argument('file', help='AIMF file (.aimf)')
     p_extract.add_argument('-o', '--output', help='Output file (default: stdout)')
     
     # chunks
     p_chunks = subparsers.add_parser('chunks', help='List chunks')
-    p_chunks.add_argument('file', help='AIF-BIN file')
+    p_chunks.add_argument('file', help='AIMF file (.aimf)')
     p_chunks.add_argument('-l', '--limit', type=int, default=10, help='Max chunks to show')
     
     args = parser.parse_args()
@@ -238,9 +244,11 @@ def main():
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   AIF-BIN Lite — Free & Open Source
   
+  📦 Output: .aimf (v1 JSON, human-readable)
+  
   ✅ Included: migrate, info, extract, chunks
   
-  🔒 Pro Only: search, batch, watch, inspector
+  🔒 Pro Only: search, batch, watch, .aif-bin (v2)
      Upgrade: https://aifbin.dev
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """)

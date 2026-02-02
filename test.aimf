@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-lite",
+  "format": "json",
+  "metadata": {
+    "source_file": "test.md",
+    "created_at": "2026-02-02T07:46:35.628332",
+    "chunk_count": 1,
+    "file_hash": "5ce99763735139cddabd388b722fecac"
+  },
+  "chunks": [
+    {
+      "id": 0,
+      "content": "Test content for demo",
+      "type": "text"
+    }
+  ],
+  "original_raw": "Test content for demo\n"
+}
