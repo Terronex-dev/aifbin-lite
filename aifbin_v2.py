@@ -70,7 +70,18 @@ try:
     HAS_MSGPACK = True
 except ImportError:
     HAS_MSGPACK = False
-    print("Warning: msgpack not installed. Run: pip install msgpack")
+    print("""
+❌  Error: 'msgpack' library not found.
+    AIF-BIN v2 requires msgpack for binary encoding.
+
+    Install with:
+    pip install msgpack                      # macOS/Windows
+    pip install msgpack --break-system-packages # Debian/Ubuntu (WSL)
+
+    Or, use AIF-BIN v1 for JSON-based memory (no dependencies):
+    python3 aifbin_v1.py --help
+""")
+    sys.exit(1) # Exit if msgpack is not available
 
 # Constants
 MAGIC = b"AIFBIN\x00\x01"
