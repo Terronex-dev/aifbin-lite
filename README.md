@@ -93,11 +93,15 @@ Compact binary format with MessagePack encoding. Uses `.aif-bin` extension. Used
 git clone https://github.com/terronexdev/aifbin-lite.git
 cd aifbin-lite
 
-# No dependencies for v1
+# No dependencies for v1 (AIMF)
 python3 aifbin_v1.py --help
 
-# For v2, install msgpack
+# For v2 (AIF-BIN), install msgpack
+# macOS/Windows:
 pip install msgpack
+# Debian/Ubuntu (WSL):
+pip install msgpack --break-system-packages
+
 python3 aifbin_v2.py --help
 ```
 
@@ -110,7 +114,7 @@ python3 aifbin_v2.py --help
 ```bash
 # Convert markdown to AIMF (v1 JSON)
 python3 aifbin_v1.py migrate notes.md
-# Output: notes.aimf
+# Output: notes.aimf (human-readable JSON)
 
 # View file info
 python3 aifbin_v1.py info notes.aimf
@@ -126,8 +130,8 @@ python3 aifbin_v1.py chunks notes.aimf
 
 ```bash
 # Convert markdown to AIF-BIN (v2 binary)
-python3 aifbin_v2.py migrate notes.md -o output/
-# Output: notes.aif-bin
+python3 aifbin_v2.py migrate notes.md
+# Output: notes.aif-bin (compact binary)
 
 # View file info
 python3 aifbin_v2.py info notes.aif-bin
@@ -135,8 +139,33 @@ python3 aifbin_v2.py info notes.aif-bin
 # Extract original content
 python3 aifbin_v2.py extract notes.aif-bin
 
-# Verify checksum
-python3 aifbin_v2.py verify notes.aif-bin
+# List chunks
+python3 aifbin_v2.py chunks notes.aif-bin
+
+# Upgrade AIMF (v1) to AIF-BIN (v2)
+python3 aifbin_v2.py upgrade notes.aimf -o upgraded.aif-bin
+# Output: upgraded.aif-bin
+```
+
+---
+
+## Troubleshooting
+
+### `error: externally-managed-environment` (Debian/Ubuntu/WSL)
+
+This error occurs when `pip` tries to install packages system-wide in environments where Python packages are managed by the OS.
+
+**Solution:** Use the `--break-system-packages` flag:
+```bash
+pip install msgpack --break-system-packages
+```
+Or, for a cleaner approach, use a Python virtual environment:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install msgpack
+# Deactivate when done:
+deactivate
 ```
 
 ---
@@ -153,37 +182,24 @@ python3 aifbin_v2.py verify notes.aif-bin
 
 ### How to Migrate
 
+**Option 1: Using the CLI (Recommended for most users)**
+
+```bash
+python3 aifbin_v2.py upgrade your_file.aimf -o your_file.aif-bin
+```
+
+**Option 2: Programmatically (for developers)**
+
 ```python
-import json
-from aifbin_v2 import AifBinV2Writer
+from aifbin_v2 import migrate_from_v1
 
-# Load AIMF file (v1)
-with open('notes.aimf', 'r') as f:
-    v1_data = json.load(f)
+# Assuming you have a v1 .aimf file
+v1_path = 'your_file.aimf'
+v2_path = 'your_file.aif-bin'
 
-# Create v2 file
-writer = AifBinV2Writer()
-writer.set_metadata({
-    'title': v1_data['metadata'].get('source_file', 'Untitled'),
-    'created': v1_data['metadata'].get('created_at'),
-    'migrated_from': 'v1'
-})
+migrate_from_v1(v1_path, v2_path)
 
-# Set original content
-if 'original_raw' in v1_data:
-    writer.set_original_raw(v1_data['original_raw'].encode('utf-8'))
-
-# Add chunks
-for chunk in v1_data.get('chunks', []):
-    writer.add_chunk('TEXT', chunk['content'].encode('utf-8'), {
-        'id': chunk.get('id'),
-        'type': chunk.get('type', 'text')
-    })
-
-# Write v2 file
-v2_data = writer.build()
-with open('notes_v2.aif-bin', 'wb') as f:
-    f.write(v2_data)
+print(f"Successfully upgraded {v1_path} to {v2_path}")
 ```
 
 See `examples/migrate_v1_to_v2.py` for a complete migration script.
