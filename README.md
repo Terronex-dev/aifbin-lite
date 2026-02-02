@@ -92,17 +92,30 @@ Compact binary format with MessagePack encoding. Uses `.aif-bin` extension. Used
 # Clone the repo
 git clone https://github.com/terronexdev/aifbin-lite.git
 cd aifbin-lite
+```
 
-# No dependencies for v1 (AIMF)
+### Windows (PowerShell/CMD)
+
+```powershell
+# v1 - No dependencies
 python aifbin_v1.py --help
 
-# For v2 (AIF-BIN), install msgpack
+# v2 - Install msgpack first
 pip install msgpack
 python aifbin_v2.py --help
 ```
 
-> **Note:** On Windows use `python`. On macOS/Linux you may need `python3`.
-> For Debian/Ubuntu: `pip install msgpack --break-system-packages`
+### Linux / macOS / WSL
+
+```bash
+# v1 - No dependencies
+python3 aifbin_v1.py --help
+
+# v2 - Install msgpack first
+pip3 install msgpack                           # macOS
+pip install msgpack --break-system-packages    # Debian/Ubuntu/WSL
+python3 aifbin_v2.py --help
+```
 
 ---
 
@@ -110,40 +123,40 @@ python aifbin_v2.py --help
 
 ### AIMF Commands (aifbin_v1.py)
 
+**Windows:**
+```powershell
+python aifbin_v1.py migrate notes.md      # Convert to AIMF (JSON)
+python aifbin_v1.py info notes.aimf       # View file info
+python aifbin_v1.py chunks notes.aimf     # List chunks
+python aifbin_v1.py extract notes.aimf    # Extract original content
+```
+
+**Linux / macOS / WSL:**
 ```bash
-# Convert markdown to AIMF (v1 JSON)
-python aifbin_v1.py migrate notes.md
-# Output: notes.aimf (human-readable JSON)
-
-# View file info
-python aifbin_v1.py info notes.aimf
-
-# Extract original content
-python aifbin_v1.py extract notes.aimf
-
-# List chunks
-python aifbin_v1.py chunks notes.aimf
+python3 aifbin_v1.py migrate notes.md      # Convert to AIMF (JSON)
+python3 aifbin_v1.py info notes.aimf       # View file info
+python3 aifbin_v1.py chunks notes.aimf     # List chunks
+python3 aifbin_v1.py extract notes.aimf    # Extract original content
 ```
 
 ### AIF-BIN Commands (aifbin_v2.py)
 
+**Windows:**
+```powershell
+python aifbin_v2.py migrate notes.md              # Convert to AIF-BIN (binary)
+python aifbin_v2.py info notes.aif-bin            # View file info
+python aifbin_v2.py chunks notes.aif-bin          # List chunks
+python aifbin_v2.py extract notes.aif-bin         # Extract original content
+python aifbin_v2.py upgrade notes.aimf            # Upgrade v1 to v2
+```
+
+**Linux / macOS / WSL:**
 ```bash
-# Convert markdown to AIF-BIN (v2 binary)
-python aifbin_v2.py migrate notes.md
-# Output: notes.aif-bin (compact binary)
-
-# View file info
-python aifbin_v2.py info notes.aif-bin
-
-# Extract original content
-python aifbin_v2.py extract notes.aif-bin
-
-# List chunks
-python aifbin_v2.py chunks notes.aif-bin
-
-# Upgrade AIMF (v1) to AIF-BIN (v2)
-python3 aifbin_v2.py upgrade notes.aimf -o upgraded.aif-bin
-# Output: upgraded.aif-bin
+python3 aifbin_v2.py migrate notes.md              # Convert to AIF-BIN (binary)
+python3 aifbin_v2.py info notes.aif-bin            # View file info
+python3 aifbin_v2.py chunks notes.aif-bin          # List chunks
+python3 aifbin_v2.py extract notes.aif-bin         # Extract original content
+python3 aifbin_v2.py upgrade notes.aimf            # Upgrade v1 to v2
 ```
 
 ---
@@ -154,17 +167,26 @@ python3 aifbin_v2.py upgrade notes.aimf -o upgraded.aif-bin
 
 This error occurs when `pip` tries to install packages system-wide in environments where Python packages are managed by the OS.
 
-**Solution:** Use the `--break-system-packages` flag:
+**Solution 1:** Use the `--break-system-packages` flag:
 ```bash
 pip install msgpack --break-system-packages
 ```
-Or, for a cleaner approach, use a Python virtual environment:
+
+**Solution 2:** Use a Python virtual environment:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install msgpack
+python3 aifbin_v2.py --help
 # Deactivate when done:
 deactivate
+```
+
+### `python3` not found on Windows
+
+On Windows, use `python` instead of `python3`:
+```powershell
+python aifbin_v1.py --help
 ```
 
 ---
@@ -181,24 +203,22 @@ deactivate
 
 ### How to Migrate
 
-**Option 1: Using the CLI (Recommended for most users)**
+**Option 1: Using the CLI (Recommended)**
 
 ```bash
-python3 aifbin_v2.py upgrade your_file.aimf -o your_file.aif-bin
+# Windows
+python aifbin_v2.py upgrade myfile.aimf -o myfile.aif-bin
+
+# Linux / macOS / WSL
+python3 aifbin_v2.py upgrade myfile.aimf -o myfile.aif-bin
 ```
 
-**Option 2: Programmatically (for developers)**
+**Option 2: Programmatically**
 
 ```python
 from aifbin_v2 import migrate_from_v1
 
-# Assuming you have a v1 .aimf file
-v1_path = 'your_file.aimf'
-v2_path = 'your_file.aif-bin'
-
-migrate_from_v1(v1_path, v2_path)
-
-print(f"Successfully upgraded {v1_path} to {v2_path}")
+migrate_from_v1('myfile.aimf', 'myfile.aif-bin')
 ```
 
 See `examples/migrate_v1_to_v2.py` for a complete migration script.
