@@ -94,16 +94,15 @@ git clone https://github.com/terronexdev/aifbin-lite.git
 cd aifbin-lite
 
 # No dependencies for v1 (AIMF)
-python3 aifbin_v1.py --help
+python aifbin_v1.py --help
 
 # For v2 (AIF-BIN), install msgpack
-# macOS/Windows:
 pip install msgpack
-# Debian/Ubuntu (WSL):
-pip install msgpack --break-system-packages
-
-python3 aifbin_v2.py --help
+python aifbin_v2.py --help
 ```
+
+> **Note:** On Windows use `python`. On macOS/Linux you may need `python3`.
+> For Debian/Ubuntu: `pip install msgpack --break-system-packages`
 
 ---
 
@@ -113,34 +112,34 @@ python3 aifbin_v2.py --help
 
 ```bash
 # Convert markdown to AIMF (v1 JSON)
-python3 aifbin_v1.py migrate notes.md
+python aifbin_v1.py migrate notes.md
 # Output: notes.aimf (human-readable JSON)
 
 # View file info
-python3 aifbin_v1.py info notes.aimf
+python aifbin_v1.py info notes.aimf
 
 # Extract original content
-python3 aifbin_v1.py extract notes.aimf
+python aifbin_v1.py extract notes.aimf
 
 # List chunks
-python3 aifbin_v1.py chunks notes.aimf
+python aifbin_v1.py chunks notes.aimf
 ```
 
 ### AIF-BIN Commands (aifbin_v2.py)
 
 ```bash
 # Convert markdown to AIF-BIN (v2 binary)
-python3 aifbin_v2.py migrate notes.md
+python aifbin_v2.py migrate notes.md
 # Output: notes.aif-bin (compact binary)
 
 # View file info
-python3 aifbin_v2.py info notes.aif-bin
+python aifbin_v2.py info notes.aif-bin
 
 # Extract original content
-python3 aifbin_v2.py extract notes.aif-bin
+python aifbin_v2.py extract notes.aif-bin
 
 # List chunks
-python3 aifbin_v2.py chunks notes.aif-bin
+python aifbin_v2.py chunks notes.aif-bin
 
 # Upgrade AIMF (v1) to AIF-BIN (v2)
 python3 aifbin_v2.py upgrade notes.aimf -o upgraded.aif-bin
