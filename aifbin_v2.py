@@ -415,68 +415,241 @@ def migrate_from_v1(v1_path: str, v2_path: str, embeddings: Optional[List[List[f
     return writer.write(aifbin, v2_path)
 
 
-# CLI for testing
+# CLI
 if __name__ == "__main__":
     import sys
+    import argparse
+    from pathlib import Path
     
-    if len(sys.argv) < 2:
-        print("Usage: python aifbin_spec_v2.py <command> [args]")
-        print("Commands:")
-        print("  info <file.aif-bin>      Show file info")
-        print("  read <file.aif-bin>      Full parse and display")
-        print("  create <output.aif-bin>  Create a test file")
-        sys.exit(1)
-    
-    cmd = sys.argv[1]
-    
-    if cmd == "info" and len(sys.argv) >= 3:
-        reader = AIFBINReader(sys.argv[2])
-        info = reader.get_info()
-        print("=== AIF-BIN v2 Info ===")
-        for k, v in info.items():
-            print(f"  {k}: {v}")
-    
-    elif cmd == "read" and len(sys.argv) >= 3:
-        reader = AIFBINReader(sys.argv[2])
-        aifbin = reader.read()
-        print("=== AIF-BIN v2 Contents ===")
-        print(f"Metadata: {aifbin.metadata}")
-        print(f"Chunks: {len(aifbin.chunks)}")
-        for i, c in enumerate(aifbin.chunks):
-            print(f"  [{i}] {c.chunk_type.name}: {len(c.data)} bytes")
-            if c.data:
-                preview = c.data[:100].decode('utf-8', errors='replace')
-                print(f"      Preview: {preview}...")
-        print(f"Has original: {aifbin.original_raw is not None}")
-        print(f"Versions: {len(aifbin.versions)}")
-    
-    elif cmd == "create" and len(sys.argv) >= 3:
-        # Create a test file
-        test_file = AIFBINFile(
-            metadata={
-                'title': 'Test Memory',
-                'created': datetime.now().isoformat(),
-                'tags': ['test', 'demo']
-            },
-            chunks=[
-                ContentChunk(
+    def cmd_migrate(args):
+        """Convert file to AIF-BIN v2 binary format."""
+        source = Path(args.source)
+        
+        if not source.exists():
+            print(f"❌ File not found: {source}")
+            sys.exit(1)
+        
+        # Determine output path
+        if args.output:
+            output = Path(args.output)
+            if output.is_dir():
+                output = output / source.with_suffix('.aif-bin').name
+        else:
+            output = source.with_suffix('.aif-bin')
+        
+        print(f"📄 Converting: {source.name}")
+        
+        # Read source file
+        with open(source, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Chunk the content
+        words = content.split()
+        chunks = []
+        chunk_size = 512
+        overlap = 50
+        start = 0
+        while start < len(words):
+            end = start + chunk_size
+            chunk_text = ' '.join(words[start:end])
+            if chunk_text.strip():
+                chunks.append(ContentChunk(
                     chunk_type=ChunkType.TEXT,
-                    data=b"This is a test chunk with some content.",
-                    metadata={'caption': 'Test chunk 1'}
-                ),
-                ContentChunk(
-                    chunk_type=ChunkType.CODE,
-                    data=b"def hello():\n    print('Hello, AIF-BIN!')",
-                    metadata={'language': 'python', 'caption': 'Code example'}
-                )
-            ],
-            original_raw=b"# Original Markdown\n\nThis is the source document.",
+                    data=chunk_text.encode('utf-8'),
+                    metadata={'id': len(chunks)}
+                ))
+            start = end - overlap
+        
+        if not chunks:
+            chunks.append(ContentChunk(
+                chunk_type=ChunkType.TEXT,
+                data=content.encode('utf-8'),
+                metadata={'id': 0}
+            ))
+        
+        # Build AIF-BIN file
+        aifbin = AIFBINFile(
+            metadata={
+                'title': source.stem,
+                'source_file': str(source),
+                'created': datetime.now().isoformat(),
+                'chunk_count': len(chunks)
+            },
+            chunks=chunks,
+            original_raw=content.encode('utf-8'),
             versions=[]
         )
         
         writer = AIFBINWriter()
-        size = writer.write(test_file, sys.argv[2])
-        print(f"Created {sys.argv[2]} ({size} bytes)")
+        size = writer.write(aifbin, str(output))
+        print(f"✅ Created: {output.name} ({len(chunks)} chunks, {size} bytes)")
+        print(f"   Format: AIF-BIN v2 (binary, supports embeddings)")
     
+    def cmd_upgrade(args):
+        """Upgrade .aimf (v1 JSON) to .aif-bin (v2 binary)."""
+        import json
+        source = Path(args.source)
+        
+        if not source.exists():
+            print(f"❌ File not found: {source}")
+            sys.exit(1)
+        
+        # Determine output path
+        if args.output:
+            output = Path(args.output)
+        else:
+            output = source.with_suffix('.aif-bin')
+        
+        print(f"📄 Upgrading: {source.name} → {output.name}")
+        
+        size = migrate_from_v1(str(source), str(output))
+        print(f"✅ Created: {output.name} ({size} bytes)")
+        print(f"   Format: AIF-BIN v2 (binary)")
+    
+    def cmd_info(args):
+        """Show file info."""
+        filepath = Path(args.file)
+        if not filepath.exists():
+            print(f"❌ File not found: {filepath}")
+            sys.exit(1)
+        
+        reader = AIFBINReader(str(filepath))
+        info = reader.get_info()
+        
+        print(f"\n📦 AIF-BIN File Info (v2 Binary)")
+        print(f"{'─' * 40}")
+        print(f"  File:       {filepath.name}")
+        print(f"  Valid:      {'✅ Yes' if info['magic_valid'] else '❌ No'}")
+        print(f"  Version:    {info['version']}")
+        print(f"  Size:       {info['total_size']} bytes")
+        print(f"  Chunks:     {info['chunk_count']}")
+        print(f"  Has Raw:    {'Yes' if info['has_original_raw'] else 'No'}")
+        print(f"  Has Versions: {'Yes' if info['has_versions'] else 'No'}")
+        print(f"  Checksum:   {info['checksum']}")
+        print()
+    
+    def cmd_extract(args):
+        """Extract original content."""
+        filepath = Path(args.file)
+        if not filepath.exists():
+            print(f"❌ File not found: {filepath}")
+            sys.exit(1)
+        
+        reader = AIFBINReader(str(filepath))
+        aifbin = reader.read()
+        
+        if aifbin.original_raw:
+            content = aifbin.original_raw.decode('utf-8', errors='replace')
+            if args.output:
+                with open(args.output, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                print(f"✅ Extracted to {args.output}")
+            else:
+                print(content)
+        else:
+            print("❌ No original content found")
+            sys.exit(1)
+    
+    def cmd_chunks(args):
+        """List chunks."""
+        filepath = Path(args.file)
+        if not filepath.exists():
+            print(f"❌ File not found: {filepath}")
+            sys.exit(1)
+        
+        reader = AIFBINReader(str(filepath))
+        aifbin = reader.read()
+        
+        print(f"\n📦 Chunks in {filepath.name} (AIF-BIN v2)")
+        print(f"{'─' * 50}")
+        
+        for i, chunk in enumerate(aifbin.chunks[:args.limit]):
+            preview = chunk.data[:100].decode('utf-8', errors='replace')
+            print(f"\n  [{i}] {chunk.chunk_type.name}")
+            print(f"      {preview}...")
+        
+        if len(aifbin.chunks) > args.limit:
+            print(f"\n  ... and {len(aifbin.chunks) - args.limit} more")
+    
+    # Argument parser
+    parser = argparse.ArgumentParser(
+        prog='aifbin-v2',
+        description='AIF-BIN v2 — Binary Format CLI',
+        epilog='For semantic search, use AIF-BIN Pro: https://aifbin.dev'
+    )
+    parser.add_argument('--version', '-v', action='store_true', help='Show version')
+    
+    subparsers = parser.add_subparsers(dest='command', help='Commands')
+    
+    # migrate
+    p_migrate = subparsers.add_parser('migrate', help='Convert file to AIF-BIN v2 (binary)')
+    p_migrate.add_argument('source', help='Source file (markdown, text)')
+    p_migrate.add_argument('-o', '--output', help='Output file or directory')
+    
+    # upgrade
+    p_upgrade = subparsers.add_parser('upgrade', help='Upgrade .aimf (v1) to .aif-bin (v2)')
+    p_upgrade.add_argument('source', help='Source .aimf file')
+    p_upgrade.add_argument('-o', '--output', help='Output .aif-bin file')
+    
+    # info
+    p_info = subparsers.add_parser('info', help='Show file info')
+    p_info.add_argument('file', help='AIF-BIN file (.aif-bin)')
+    
+    # extract
+    p_extract = subparsers.add_parser('extract', help='Extract original content')
+    p_extract.add_argument('file', help='AIF-BIN file (.aif-bin)')
+    p_extract.add_argument('-o', '--output', help='Output file')
+    
+    # chunks
+    p_chunks = subparsers.add_parser('chunks', help='List chunks')
+    p_chunks.add_argument('file', help='AIF-BIN file (.aif-bin)')
+    p_chunks.add_argument('-l', '--limit', type=int, default=10, help='Max chunks to show')
+    
+    args = parser.parse_args()
+    
+    if args.version:
+        print(f"""
+AIF-BIN v2 (Binary Format)
+Format version: {VERSION}
+
+📦 Output: .aif-bin (binary, MessagePack)
+📄 License: MIT
+
+Features:
+  • Binary format (smaller, faster)
+  • Supports embeddings for semantic search
+  • CRC64 checksums
+  • Version history
+
+🔗 https://aifbin.dev
+""")
+        sys.exit(0)
+    
+    if not args.command:
+        parser.print_help()
+        print(f"""
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  AIF-BIN v2 — Binary Format
+  
+  📦 Output: .aif-bin (binary)
+  
+  ✅ Included: migrate, upgrade, info, extract, chunks
+  
+  🔒 Pro Only: search, batch, watch, embeddings
+     Upgrade: https://aifbin.dev
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+""")
+        sys.exit(0)
+    
+    commands = {
+        'migrate': cmd_migrate,
+        'upgrade': cmd_upgrade,
+        'info': cmd_info,
+        'extract': cmd_extract,
+        'chunks': cmd_chunks,
+    }
+    
+    if args.command in commands:
+        commands[args.command](args)
     else:
-        print(f"Unknown command: {cmd}")
+        print(f"Unknown command: {args.command}")
