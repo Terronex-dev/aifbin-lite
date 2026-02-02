@@ -1,19 +1,17 @@
 # Sample Document
 
-This is a sample markdown file for testing AIF-BIN.
+This is a sample markdown file for testing.
 
-## Section One
+## Meeting Notes
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. This content demonstrates how AIF-BIN converts documents into searchable memory files.
+Team sync on Monday. Discussed project timeline and upcoming milestones. Next review scheduled for Friday.
 
-## Section Two
+## Action Items
 
-- Item one
-- Item two  
-- Item three
+- Complete documentation review
+- Update project roadmap
+- Schedule follow-up meeting
 
-## Notes
+## Summary
 
-Use this file to test the migration commands:
-- `python aifbin_v1.py migrate sample.md` → creates `sample.aimf`
-- `python aifbin_v2.py migrate sample.md` → creates `sample.aif-bin`
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
