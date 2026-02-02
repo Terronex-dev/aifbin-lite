@@ -52,7 +52,7 @@ Simple, human-readable JSON. Uses `.aimf` extension. Great for learning and debu
   "version": "1.0.0-lite",
   "format": "json",
   "metadata": {
-    "source_file": "notes.md",
+    "source_file": "sample.md",
     "created_at": "2026-01-30T10:00:00"
   },
   "chunks": [
@@ -125,38 +125,38 @@ python3 aifbin_v2.py --help
 
 **Windows:**
 ```powershell
-python aifbin_v1.py migrate notes.md      # Convert to AIMF (JSON)
-python aifbin_v1.py info notes.aimf       # View file info
-python aifbin_v1.py chunks notes.aimf     # List chunks
-python aifbin_v1.py extract notes.aimf    # Extract original content
+python aifbin_v1.py migrate sample.md      # Convert to AIMF (JSON)
+python aifbin_v1.py info sample.aimf       # View file info
+python aifbin_v1.py chunks sample.aimf     # List chunks
+python aifbin_v1.py extract sample.aimf    # Extract original content
 ```
 
 **Linux / macOS / WSL:**
 ```bash
-python3 aifbin_v1.py migrate notes.md      # Convert to AIMF (JSON)
-python3 aifbin_v1.py info notes.aimf       # View file info
-python3 aifbin_v1.py chunks notes.aimf     # List chunks
-python3 aifbin_v1.py extract notes.aimf    # Extract original content
+python3 aifbin_v1.py migrate sample.md      # Convert to AIMF (JSON)
+python3 aifbin_v1.py info sample.aimf       # View file info
+python3 aifbin_v1.py chunks sample.aimf     # List chunks
+python3 aifbin_v1.py extract sample.aimf    # Extract original content
 ```
 
 ### AIF-BIN Commands (aifbin_v2.py)
 
 **Windows:**
 ```powershell
-python aifbin_v2.py migrate notes.md              # Convert to AIF-BIN (binary)
-python aifbin_v2.py info notes.aif-bin            # View file info
-python aifbin_v2.py chunks notes.aif-bin          # List chunks
-python aifbin_v2.py extract notes.aif-bin         # Extract original content
-python aifbin_v2.py upgrade notes.aimf            # Upgrade v1 to v2
+python aifbin_v2.py migrate sample.md              # Convert to AIF-BIN (binary)
+python aifbin_v2.py info sample.aif-bin            # View file info
+python aifbin_v2.py chunks sample.aif-bin          # List chunks
+python aifbin_v2.py extract sample.aif-bin         # Extract original content
+python aifbin_v2.py upgrade sample.aimf            # Upgrade v1 to v2
 ```
 
 **Linux / macOS / WSL:**
 ```bash
-python3 aifbin_v2.py migrate notes.md              # Convert to AIF-BIN (binary)
-python3 aifbin_v2.py info notes.aif-bin            # View file info
-python3 aifbin_v2.py chunks notes.aif-bin          # List chunks
-python3 aifbin_v2.py extract notes.aif-bin         # Extract original content
-python3 aifbin_v2.py upgrade notes.aimf            # Upgrade v1 to v2
+python3 aifbin_v2.py migrate sample.md              # Convert to AIF-BIN (binary)
+python3 aifbin_v2.py info sample.aif-bin            # View file info
+python3 aifbin_v2.py chunks sample.aif-bin          # List chunks
+python3 aifbin_v2.py extract sample.aif-bin         # Extract original content
+python3 aifbin_v2.py upgrade sample.aimf            # Upgrade v1 to v2
 ```
 
 ---
@@ -207,10 +207,10 @@ python aifbin_v1.py --help
 
 ```bash
 # Windows
-python aifbin_v2.py upgrade myfile.aimf -o myfile.aif-bin
+python aifbin_v2.py upgrade sample.aimf -o sample.aif-bin
 
 # Linux / macOS / WSL
-python3 aifbin_v2.py upgrade myfile.aimf -o myfile.aif-bin
+python3 aifbin_v2.py upgrade sample.aimf -o sample.aif-bin
 ```
 
 **Option 2: Programmatically**
@@ -218,7 +218,7 @@ python3 aifbin_v2.py upgrade myfile.aimf -o myfile.aif-bin
 ```python
 from aifbin_v2 import migrate_from_v1
 
-migrate_from_v1('myfile.aimf', 'myfile.aif-bin')
+migrate_from_v1('sample.aimf', 'sample.aif-bin')
 ```
 
 See `examples/migrate_v1_to_v2.py` for a complete migration script.
