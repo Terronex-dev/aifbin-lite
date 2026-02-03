@@ -41,10 +41,9 @@ AIF-BIN Lite (this repository):
   - Chunking, metadata, and file management
   - No AI or embedding functionality
 
-AIF-BIN Pro (available at terronex.dev):
+AIF-BIN Pro (github.com/Terronex-dev/aifbin-pro):
   - Commercial product
   - Full semantic search with AI embeddings
-  - Studio GUI application
   - Integration plugins (LangChain, Obsidian, VS Code, etc.)
   - Priority support
 
