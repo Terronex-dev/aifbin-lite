@@ -38,7 +38,6 @@ This repository contains **AIF-BIN Lite**, the free and open-source format tools
 
 **AIF-BIN Pro** is a separate commercial product available at [terronex.dev](https://terronex.dev) that adds:
 - Semantic search with AI embeddings
-- Studio GUI application
 - Integration plugins
 - Priority support
 

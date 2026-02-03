@@ -30,7 +30,7 @@ A single `.aimf` or `.aif-bin` file contains:
 - **Extracted content** — Text parsed into searchable chunks
 - **Metadata** — Title, timestamps, checksums
 
-This is the **free, open source** implementation. For semantic search, batch processing, and the desktop app, see [AIF-BIN Pro](https://github.com/terronexdev/aifbin-pro).
+This is the **free, open source** implementation. For semantic search, batch processing, see [AIF-BIN Pro](https://github.com/Terronex-dev/aifbin-pro).
 
 ---
 
@@ -64,7 +64,7 @@ Simple, human-readable JSON. Uses `.aimf` extension. Great for learning and debu
 
 ### AIF-BIN - AI Formatted - Binary (v2)
 
-Compact binary format with MessagePack encoding. Uses `.aif-bin` extension. Used by AIF-BIN Pro and Studio.
+Compact binary format with MessagePack encoding. Uses `.aif-bin` extension. Used by AIF-BIN Pro.
 
 ```
 [Header: 64 bytes]
@@ -90,7 +90,7 @@ Compact binary format with MessagePack encoding. Uses `.aif-bin` extension. Used
 
 ```bash
 # Clone the repo
-git clone https://github.com/terronexdev/aifbin-lite.git
+git clone https://github.com/Terronex-dev/aifbin-lite.git
 cd aifbin-lite
 ```
 
@@ -239,9 +239,8 @@ See `examples/migrate_v1_to_v2.py` for a complete migration script.
 
 | Project | Description |
 |---------|-------------|
-| [AIF-BIN Lite](https://github.com/terronexdev/aifbin-lite) | Free CLI (this repo) |
-| [AIF-BIN Pro](https://github.com/terronexdev/aifbin-pro) | Pro CLI + Inspector |
-| [AIF-BIN Studio](https://github.com/terronexdev/aifbin-studio) | Full desktop app |
+| [AIF-BIN Lite](https://github.com/Terronex-dev/aifbin-lite) | Free CLI (this repo) |
+| [AIF-BIN Pro](https://github.com/Terronex-dev/aifbin-pro) | Pro CLI + Inspector |
 
 ---
 
@@ -274,7 +273,6 @@ See `examples/migrate_v1_to_v2.py` for a complete migration script.
 │   ✓ Everything in Lite, plus:                                │
 │   ✓ AI embeddings (text → vectors)                           │
 │   ✓ Semantic search ("What did I decide about X?")           │
-│   ✓ Studio GUI for visual exploration                        │
 │   ✓ Plugins (LangChain, Obsidian, VS Code, etc.)             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -287,7 +285,7 @@ See `examples/migrate_v1_to_v2.py` for a complete migration script.
 
 ### Ready to Upgrade?
 
-[AIF-BIN Pro](https://github.com/terronexdev/aifbin-pro) includes:
+[AIF-BIN Pro](https://github.com/Terronex-dev/aifbin-pro) includes:
 
 - **Semantic search** — Find by meaning, not keywords
 - **Batch processing** — Convert entire directories
@@ -316,8 +314,7 @@ See `examples/migrate_v1_to_v2.py` for a complete migration script.
 ## Links
 
 - Website: [terronex.dev/aifbin](https://terronex.dev/aifbin/)
-- Pro: [github.com/terronexdev/aifbin-pro](https://github.com/terronexdev/aifbin-pro)
-- Studio: [github.com/terronexdev/aifbin-studio](https://github.com/terronexdev/aifbin-studio)
+- Pro: [github.com/Terronex-dev/aifbin-pro](https://github.com/Terronex-dev/aifbin-pro)
 - Support: support@terronex.dev
 
 ---
