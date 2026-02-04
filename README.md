@@ -1,6 +1,7 @@
 # AIF-BIN Lite
 
 **Free & Open Source** CLI for AI memory files.
+[![CI](https://github.com/terronex-dev/aifbin-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/terronex-dev/aifbin-lite/actions/workflows/ci.yml)
 
 [![Patent Pending](https://img.shields.io/badge/Patent-Pending-blue.svg)](https://www.terronex.dev)
 
