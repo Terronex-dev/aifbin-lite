@@ -98,23 +98,26 @@ cd aifbin-lite
 ### Windows (PowerShell/CMD)
 
 ```powershell
-# v1 - No dependencies
+# Install dependencies
+pip install -r requirements.txt
+
+# v1 - No external dependencies needed, but included in requirements for simplicity
 python aifbin_v1.py --help
 
-# v2 - Install msgpack first
-pip install msgpack
+# v2
 python aifbin_v2.py --help
 ```
 
 ### Linux / macOS / WSL
 
 ```bash
-# v1 - No dependencies
+# Install dependencies
+pip3 install -r requirements.txt
+
+# v1 - No external dependencies needed, but included in requirements for simplicity
 python3 aifbin_v1.py --help
 
-# v2 - Install msgpack first
-pip3 install msgpack                           # macOS
-pip install msgpack --break-system-packages    # Debian/Ubuntu/WSL
+# v2
 python3 aifbin_v2.py --help
 ```
 
@@ -170,14 +173,14 @@ This error occurs when `pip` tries to install packages system-wide in environmen
 
 **Solution 1:** Use the `--break-system-packages` flag:
 ```bash
-pip install msgpack --break-system-packages
+pip3 install -r requirements.txt --break-system-packages
 ```
 
-**Solution 2:** Use a Python virtual environment:
+**Solution 2 (Recommended):** Use a Python virtual environment:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install msgpack
+pip install -r requirements.txt
 python3 aifbin_v2.py --help
 # Deactivate when done:
 deactivate
