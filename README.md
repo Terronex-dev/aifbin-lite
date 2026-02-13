@@ -1,7 +1,10 @@
 # AIF-BIN Lite
 
 **Free & Open Source** CLI for AI memory files.
+
+[![PyPI version](https://img.shields.io/pypi/v/aifbin-lite.svg)](https://pypi.org/project/aifbin-lite/)
 [![CI](https://github.com/terronex-dev/aifbin-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/terronex-dev/aifbin-lite/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 [![Patent Pending](https://img.shields.io/badge/Patent-Pending-blue.svg)](https://www.terronex.dev)
 
