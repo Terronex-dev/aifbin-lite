@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aifbin-lite"
+version = "1.0.0"
+description = "Free & open source CLI for AIF-BIN files. Convert documents to semantic memory format."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Terronex", email = "terronex.dev@gmail.com"}
+]
+keywords = ["ai", "memory", "semantic-search", "aif-bin", "document-processing", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "msgpack>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Terronex-dev/aifbin-lite"
+Documentation = "https://github.com/Terronex-dev/aifbin-lite#readme"
+Repository = "https://github.com/Terronex-dev/aifbin-lite.git"
+Issues = "https://github.com/Terronex-dev/aifbin-lite/issues"
+
+[project.scripts]
+aifbin-lite = "aifbin_v2:main"
+
+[tool.setuptools]
+py-modules = ["aifbin_v1", "aifbin_v2"]

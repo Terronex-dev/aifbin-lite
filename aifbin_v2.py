@@ -427,7 +427,8 @@ def migrate_from_v1(v1_path: str, v2_path: str, embeddings: Optional[List[List[f
 
 
 # CLI
-if __name__ == "__main__":
+def main():
+    """CLI entry point."""
     import sys
     import argparse
     from pathlib import Path
@@ -674,3 +675,7 @@ Features:
         commands[args.command](args)
     else:
         print(f"Unknown command: {args.command}")
+
+
+if __name__ == "__main__":
+    main()
